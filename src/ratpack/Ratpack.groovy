@@ -5,11 +5,13 @@ import ratpack.groovy.sql.SqlModule
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.handling.RequestLogger
 import ratpack.hikari.HikariModule
+import ratpack.hystrix.HystrixModule
+import ratpack.rx.RxRatpack
+import ratpack.service.Service
+import ratpack.service.StartEvent
 
 import static ratpack.groovy.Groovy.groovyMarkupTemplate
 import static ratpack.groovy.Groovy.ratpack
-import static ratpack.jackson.Jackson.json
-import static ratpack.jackson.Jackson.fromJson;
 
 final Logger logger = LoggerFactory.getLogger(ratpack.class);
 
@@ -21,22 +23,20 @@ ratpack {
       c.setDataSourceClassName("org.postgresql.ds.PGPoolingDataSource")
     }
     module SqlModule
-//    module new HystrixModule().sse()
+    module BookModule
+    module new HystrixModule().sse()
 
-//    bind BookErrorHandler
-
-
-//    bindInstance Service, new Service() {
-//      @Override
-//      void onStart(StartEvent event) throws Exception {
-//        logger.info "Initializing RX"
-//        RxRatpack.initialize()
-//        event.registry.get(BookService).createTable()
-//      }
-//    }
+    bindInstance Service, new Service() {
+      @Override
+      void onStart(StartEvent event) throws Exception {
+        logger.info "Initializing RX"
+        RxRatpack.initialize()
+        event.registry.get(BookService).createTable()
+      }
+    }
   }
 
-  handlers {
+  handlers { BookService bookService ->
     all RequestLogger.ncsa(logger)
 
     get {
@@ -48,26 +48,39 @@ ratpack {
     }
 
     prefix("books") {
-
-      get {
-        render(json([]))
-      }
-
-      post("new") {
-        render(parse(fromJson(Book.class)).map{ b ->
-          // TODO create record
-          json(new Book(isbn: b.getIsbn()))
-        })
-      }
-
-      get(":isbn") {
-        def isbn = pathTokens["isbn"]
-
-        // TODO get record
-
-        render(json(new Book(isbn: isbn)))
-      }
+      all chain(registry.get(BookEndpoint))
     }
+//
+//    prefix("books") {
+//
+//      get {
+//        bookService.all().
+//                toList().
+//                subscribe { List<Book> books ->
+//                  render json(books)
+//                }
+//      }
+//
+//      post("new") {
+//        render(parse(fromJson(Book.class)).map{ b ->
+//          // TODO create record
+//          json(new Book(isbn: b.getIsbn()))
+//        })
+//      }
+//
+//      get(":isbn") {
+//        bookService.
+//                find(pathTokens["isbn"].toString()).
+//                single().
+//                subscribe { Book book ->
+//                  if (book == null) {
+//                    clientError 404
+//                  } else {
+//                    render json(book)
+//                  }
+//                }
+//      }
+//    }
 
 
     files { dir "public" }
