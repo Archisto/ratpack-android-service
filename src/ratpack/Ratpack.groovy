@@ -50,38 +50,6 @@ ratpack {
     prefix("books") {
       all chain(registry.get(BookEndpoint))
     }
-//
-//    prefix("books") {
-//
-//      get {
-//        bookService.all().
-//                toList().
-//                subscribe { List<Book> books ->
-//                  render json(books)
-//                }
-//      }
-//
-//      post("new") {
-//        render(parse(fromJson(Book.class)).map{ b ->
-//          // TODO create record
-//          json(new Book(isbn: b.getIsbn()))
-//        })
-//      }
-//
-//      get(":isbn") {
-//        bookService.
-//                find(pathTokens["isbn"].toString()).
-//                single().
-//                subscribe { Book book ->
-//                  if (book == null) {
-//                    clientError 404
-//                  } else {
-//                    render json(book)
-//                  }
-//                }
-//      }
-//    }
-
 
     files { dir "public" }
   }
