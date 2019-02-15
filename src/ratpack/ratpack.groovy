@@ -31,24 +31,28 @@ ratpack {
       void onStart(StartEvent event) throws Exception {
         logger.info "Initializing RX"
         RxRatpack.initialize()
-        event.registry.get(BookService).createTable()
+        event.registry.get(GameService).createTable()
       }
     }
   }
 
-  handlers { BookService bookService ->
+  handlers { GameService gameService ->
     all RequestLogger.ncsa(logger)
 
     get {
-      render groovyMarkupTemplate("index.gtpl", title: "My Ratpack App")
+      render groovyMarkupTemplate("index.gtpl", title: "Nappipeli")
     }
 
     get("hello") {
       response.send "Hello from Heroku!"
     }
 
-    prefix("books") {
-      all chain(registry.get(BookEndpoint))
+    prefix("winners") {
+      all chain(registry.get(WinnerEndpoint))
+    }
+
+    prefix("counter") {
+      all chain(registry.get(CounterEndpoint))
     }
 
     files { dir "public" }
