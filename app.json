@@ -1,6 +1,6 @@
 {
-  "name": "Ratpack Demo for Android",
-  "description": "This is a small demo application for showing how to run a Ratpack application on Heroku.",
-  "repository": "https://github.com/jkutner/ratpack-android-service",
+  "name": "Nappipeli",
+  "description": "This is an online button pushing game.",
+  "repository": "https://github.com/archisto/ratpack-android-service",
   "addons": ["heroku-postgresql"]
 }
