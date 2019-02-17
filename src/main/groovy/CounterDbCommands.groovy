@@ -23,24 +23,6 @@ class CounterDbCommands {
         sql.execute("drop table if exists counters")
         sql.execute("create table counters (value int)")
     }
-    
-    rx.Observable<GroovyRowResult> raiseCounter() {
-        return new HystrixObservableCommand<GroovyRowResult>(
-                HystrixObservableCommand.Setter.withGroupKey(hystrixCommandGroupKey).andCommandKey(HystrixCommandKey.Factory.asKey("raiseCounter"))) {
-
-            @Override
-            protected rx.Observable<GroovyRowResult> construct() {
-                observeEach(Blocking.get {
-                    sql.rows("select value from counters order by value")
-                })
-            }
-
-            @Override
-            protected String getCacheKey() {
-                return "db-counterdb-all"
-            }
-        }.toObservable()
-    }
 
     rx.Observable<GroovyRowResult> getAll() {
         return new HystrixObservableCommand<GroovyRowResult>(
@@ -86,7 +68,7 @@ class CounterDbCommands {
         }.toObservable()
     }
 
-    rx.Observable<Void> delete(final String nickname) {
+    rx.Observable<Void> delete() {
         return new HystrixObservableCommand<Void>(
                 HystrixObservableCommand.Setter.withGroupKey(hystrixCommandGroupKey).andCommandKey(HystrixCommandKey.Factory.asKey("delete"))) {
 

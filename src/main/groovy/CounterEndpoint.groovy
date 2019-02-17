@@ -16,13 +16,12 @@ class CounterEndpoint extends GroovyChainAction {
 
   @Override
   void execute() throws Exception {
-    post("raise") {
+    post("new") {
       parse(jsonNode()).
               observe().
               flatMap { input ->
                 gameService.insert(
-                        input.get("nickname").asText(),
-                        0l
+                        input.get("value")
                 )
               }.
               single().
@@ -30,9 +29,40 @@ class CounterEndpoint extends GroovyChainAction {
                 gameService.find(nickname)
               }.
               single().
-              subscribe { Winner createdWinner ->
-                render json(createdWinner)
+              subscribe { Counter createdCounter ->
+                render json(createdCounter)
               }
     }
+
+    post("update") {
+      parse(jsonNode()).
+              observe().
+              flatMap { input ->
+                gameService.updateCounter(
+                        input.get("value")
+                )
+              }.
+              single().
+              flatMap { value ->
+                gameService.find(value)
+              }.
+              single().
+              subscribe { Counter createdCounter ->
+                render json(createdCounter)
+              }
+    }
+
+    all {
+      byMethod {
+        get {
+          gameService.allCounters().
+                  toList().
+                  subscribe { List<Counter> counters ->
+                    render json(counters)
+                  }
+        }
+      }
+    }
+
   }
 }

@@ -51,8 +51,23 @@ class GameService {
     Observable<Void> delete(String nickname) {
         winnerDbCommands.delete(nickname)
     }
-    
-    Observable<Void> raise() {
-        counterDbCommands.raiseCounter()
+
+    Observable<Winner> allCounters() {
+        counterDbCommands.getAll().map { row ->
+            new Counter(
+                    row.value
+            )
+        }
+    }
+
+    Observable<String> insertCounter(long value) {
+        counterDbCommands.insert(value).
+                map {
+                    value
+                }
+    }
+
+    Observable<Void> updateCounter(long newValue) {
+        counterDbCommands.update(newValue)
     }
 }
