@@ -23,7 +23,7 @@ ratpack {
       c.setDataSourceClassName("org.postgresql.ds.PGPoolingDataSource")
     }
     module SqlModule
-    module BookModule
+    module GameModule
     module new HystrixModule().sse()
 
     bindInstance Service, new Service() {
