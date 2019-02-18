@@ -15,7 +15,7 @@ class GameService {
         this.winnerDbCommands = winnerDbCommands
     }
 
-    void createTables() {
+    void createTable() {
         log.info("Creating database tables")
         winnerDbCommands.createTables()
     }
