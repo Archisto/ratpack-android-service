@@ -40,7 +40,7 @@ ratpack {
     all RequestLogger.ncsa(logger)
 
     get {
-      render groovyMarkupTemplate("index.gtpl", title: "Ratpack")
+      render groovyMarkupTemplate("index.gtpl", title: "Nappipeli")
     }
 
     get("hello") {

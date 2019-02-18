@@ -20,7 +20,7 @@ class CounterEndpoint extends GroovyChainAction {
       parse(jsonNode()).
               observe().
               flatMap { input ->
-                gameService.insert(
+                gameService.insertCounter(
                         input.get("value")
                 )
               }.
