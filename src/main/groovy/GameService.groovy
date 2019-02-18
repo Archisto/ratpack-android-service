@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GameService {
 
     private final WinnerDbCommands winnerDbCommands
-    private final CounterDbCommands counterDbCommands
+    //private final CounterDbCommands counterDbCommands
 
     @Inject
     GameService(WinnerDbCommands winnerDbCommands) {
