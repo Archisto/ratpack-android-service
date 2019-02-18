@@ -11,9 +11,8 @@ class GameService {
     private final CounterDbCommands counterDbCommands
 
     @Inject
-    GameService(WinnerDbCommands winnerDbCommands, CounterDbCommands counterDbCommands) {
+    GameService(WinnerDbCommands winnerDbCommands) {
         this.winnerDbCommands = winnerDbCommands
-        this.counterDbCommands = counterDbCommands
     }
 
     void createTables() {
