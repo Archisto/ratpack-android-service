@@ -39,7 +39,7 @@ class CounterEndpoint extends GroovyChainAction {
               observe().
               flatMap { input ->
                 gameService.updateCounter(
-                        input.get("value")
+                        input.get("value").asInt()
                 )
               }.
               single().

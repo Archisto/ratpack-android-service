@@ -21,7 +21,7 @@ class CounterDbCommands {
 
     void createTables() {
         sql.execute("drop table if exists counters")
-        sql.execute("create table counters (value int)")
+        sql.execute("create table counters (value int primary key)")
     }
 
     rx.Observable<GroovyRowResult> getAll() {
