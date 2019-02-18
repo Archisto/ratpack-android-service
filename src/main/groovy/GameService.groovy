@@ -18,7 +18,6 @@ class GameService {
     void createTables() {
         log.info("Creating database tables")
         winnerDbCommands.createTables()
-        counterDbCommands.createTables()
     }
 
     Observable<Winner> all() {
