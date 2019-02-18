@@ -31,7 +31,7 @@ ratpack {
       void onStart(StartEvent event) throws Exception {
         logger.info "Initializing RX"
         RxRatpack.initialize()
-        event.registry.get(GameService).createTable()
+        event.registry.get(GameService).createTables()
       }
     }
   }
