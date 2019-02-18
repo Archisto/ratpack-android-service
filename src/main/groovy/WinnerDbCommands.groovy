@@ -21,7 +21,7 @@ class WinnerDbCommands {
 
     void createTables() {
         sql.execute("drop table if exists winners")
-        sql.execute("create table winners (nickname varchar(13) primary key, prizetier int)")
+        sql.execute("create table winners (id int primary key, nickname varchar(13), prizetier int)")
     }
 
     rx.Observable<GroovyRowResult> getAll() {
@@ -31,7 +31,7 @@ class WinnerDbCommands {
             @Override
             protected rx.Observable<GroovyRowResult> construct() {
                 observeEach(Blocking.get {
-                    sql.rows("select nickname, prizetier from winners order by nickname")
+                    sql.rows("select id, nickname, prizetier from winners order by id desc")
                 })
             }
 
@@ -42,14 +42,14 @@ class WinnerDbCommands {
         }.toObservable()
     }
 
-    rx.Observable<String> insert(final String nickname, final long prizetier) {
+    rx.Observable<String> insert(final long id, final String nickname, final long prizetier) {
         return new HystrixObservableCommand<String>(
                 HystrixObservableCommand.Setter.withGroupKey(hystrixCommandGroupKey).andCommandKey(HystrixCommandKey.Factory.asKey("insert"))) {
 
             @Override
             protected rx.Observable<List<Object>> construct() {
                 observe(Blocking.get {
-                    sql.executeInsert("insert into winners (nickname, prizetier) values ($nickname, $prizetier)")
+                    sql.executeInsert("insert into winners (id, nickname, prizetier) values ($id, $nickname, $prizetier)")
                 })
             }
         }.toObservable()

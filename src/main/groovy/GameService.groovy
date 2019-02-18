@@ -25,14 +25,15 @@ class GameService {
     Observable<Winner> all() {
         winnerDbCommands.getAll().map { row ->
             new Winner(
+                    row.id,
                     row.nickname,
                     row.prizetier
             )
         }
     }
 
-    Observable<String> insert(String nickname, long prizetier) {
-        winnerDbCommands.insert(nickname, prizetier).
+    Observable<String> insert(long id, String nickname, long prizetier) {
+        winnerDbCommands.insert(id, nickname, prizetier).
                 map {
                     nickname
                 }
@@ -41,6 +42,7 @@ class GameService {
     Observable<Winner> find(String nickname) {
         winnerDbCommands.find(nickname).map { GroovyRowResult dbRow ->
             return new Winner(
+                    dbRow.id,
                     nickname,
                     dbRow.prizetier
             )
