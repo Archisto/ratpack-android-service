@@ -8,15 +8,18 @@ import javax.inject.Inject
 class GameService {
 
     private final WinnerDbCommands winnerDbCommands
+    private final CounterDbCommands counterDbCommands
 
     @Inject
-    GameService(WinnerDbCommands winnerDbCommands) {
+    GameService(WinnerDbCommands winnerDbCommands, CounterDbCommands counterDbCommands) {
         this.winnerDbCommands = winnerDbCommands
+        this.counterDbCommands = counterDbCommands
     }
 
-    void createTable() {
+    void createTables() {
         log.info("Creating database tables")
         winnerDbCommands.createTables()
+        counterDbCommands.createTables()
     }
 
     Observable<Winner> all() {
