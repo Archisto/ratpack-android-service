@@ -25,8 +25,8 @@ class CounterEndpoint extends GroovyChainAction {
                 )
               }.
               single().
-              flatMap { nickname ->
-                gameService.find(nickname)
+              flatMap { value ->
+                gameService.findCounter(value)
               }.
               single().
               subscribe { Counter createdCounter ->
@@ -44,7 +44,7 @@ class CounterEndpoint extends GroovyChainAction {
               }.
               single().
               flatMap { value ->
-                gameService.find(value)
+                gameService.findCounter(value)
               }.
               single().
               subscribe { Counter createdCounter ->

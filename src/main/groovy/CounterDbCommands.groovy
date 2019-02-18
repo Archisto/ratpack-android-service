@@ -54,6 +54,24 @@ class CounterDbCommands {
             }
         }.toObservable()
     }
+    
+    rx.Observable<GroovyRowResult> find(final long value) {
+        return new HystrixObservableCommand<GroovyRowResult>(
+                HystrixObservableCommand.Setter.withGroupKey(hystrixCommandGroupKey).andCommandKey(HystrixCommandKey.Factory.asKey("find"))) {
+
+            @Override
+            protected rx.Observable<GroovyRowResult> construct() {
+                observe(Blocking.get {
+                    sql.firstRow("select value from counters where value = $value")
+                })
+            }
+
+            @Override
+            protected String getCacheKey() {
+                return "db-counterdb-find-$value"
+            }
+        }.toObservable()
+    }
 
     rx.Observable<Void> update(final long value) {
         return new HystrixObservableCommand<Void>(

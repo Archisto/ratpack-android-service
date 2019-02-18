@@ -70,6 +70,14 @@ class GameService {
                 }
     }
 
+    Observable<Winner> findCounter(long value) {
+        counterDbCommands.find(value).map { GroovyRowResult dbRow ->
+            return new Counter(
+                    value
+            )
+        }
+    }
+
     Observable<Void> updateCounter(long newValue) {
         counterDbCommands.update(newValue)
     }
