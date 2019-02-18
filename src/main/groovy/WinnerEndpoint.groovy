@@ -22,7 +22,7 @@ class WinnerEndpoint extends GroovyChainAction {
               flatMap { input ->
                 gameService.insert(
                         input.get("nickname").asText(),
-                        input.get("prizetier")
+                        input.get("prizetier").asInt()
                 )
               }.
               single().
